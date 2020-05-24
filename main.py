@@ -1,5 +1,6 @@
 import os
 import base64
+import html
 
 from flask import Flask, request
 from model import Message 
@@ -10,7 +11,10 @@ app = Flask(__name__)
 def home():
 
     if request.method == 'POST':
-        m = Message(content=request.form['content'])
+        original_message = request.form['content']
+        rendered_message = html.escape(str(original_message))
+
+        m = Message(content=rendered_message)
         m.save()
 
     body = """
